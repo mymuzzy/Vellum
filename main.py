@@ -1654,34 +1654,6 @@ class VellumMainWindow(QMainWindow):
                 indices.append(int(part) - 1)
         return sorted(set(indices))
 
-    # def _do_rotate(self, angle):
-    #     """Rotate pages by angle (90 = clockwise, 270 = counter-clockwise)."""
-    #     if not self._need_pdf():
-    #         return
-    #     try:
-    #         all_pages = self.rotate_scope.currentText() == "All Pages"
-    #         sel = None if all_pages else self.viewer.get_selected()
-    #         if not all_pages and not sel:
-    #             QMessageBox.warning(self, APP_NAME,
-    #                                 "Select pages or use All Pages scope.")
-    #             return
-    #         out = self._make_temp_out("rotate")
-    #         self.tools.rotate_pages(self.cur_pdf, out, angle, sel)
-    #         # Update rotation memory
-    #         try:
-    #             doc   = fitz.open(self.cur_pdf)
-    #             total = len(doc)
-    #             doc.close()
-    #         except Exception:
-    #             total = 0
-    #         targets = range(total) if all_pages else sel
-    #         for i in targets:
-    #             self.page_rotations[i] = (self.page_rotations.get(i, 0) + angle) % 360
-    #         self._apply_op(out)
-    #     except Exception as ex:
-    #         QMessageBox.critical(self, "Rotate Error", str(ex))
-    #         print(f"ERROR: Rotate failed: {ex}")
-
     def _do_rotate(self, angle):
         if not self._need_pdf():
             return
@@ -1762,6 +1734,22 @@ class VellumMainWindow(QMainWindow):
     def _do_compress_ghostscript(self):
         if not self._need_pdf():
             return
+                
+        # ── Ghostscript availability check ──────────────
+        if not self.tools._find_ghostscript():
+            QMessageBox.information(
+                self, "Ghostscript Not Installed",
+                "Ghostscript was not found on this system.\n\n"
+                "To install it:\n\n"
+                "  macOS  →  brew install ghostscript\n"
+                "  Ubuntu →  sudo apt install ghostscript\n"
+                "  Windows→  https://ghostscript.com/releases/gsdnld.html\n\n"
+                "After installing, restart Vellum and try again.\n\n"
+                "Alternatively, use the 🐍 In-built compressor — it\n"
+                "requires no external tools."
+            )
+            return
+        # ────────────────────────────────────────────────
         if not self._validate_positive(self.compress_target.value(), "Target Size"):
             return
         out = self._make_temp_out("compressed_gs")
