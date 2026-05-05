@@ -2,6 +2,9 @@ Welcome to the Vellum documentation! This guide covers everything you need to ge
 
 ---
 
+![Alt text](Vellum_Dashboard.png)
+
+
 ## 1. Installation
 
 Vellum runs fully offline. You just need Python 3.x and a few libraries. 
