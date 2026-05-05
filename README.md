@@ -2,9 +2,6 @@
 
 > ⭐ **If you found Vellum helpful, please consider leaving a star on this repository!**
 
-***
-
-# Vellum
 **The uncompromising, offline-first PDF studio.**
 
 ![Alt text](Vellum.png)
